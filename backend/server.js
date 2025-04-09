@@ -1,15 +1,14 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';              // ✅ CORS import here
-import questionRoutes from './routes/questions.js';
-import userRoutes from './routes/userRoutes.js';
-
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const questionRoutes = require('./routes/questions');
+const userRoutes = require('./routes/userRoutes');
 
 dotenv.config();
 
 const app = express();
-app.use(cors());                      // ✅ Enable CORS middleware
+app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
@@ -23,7 +22,6 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 app.use('/api/questions', questionRoutes);
 app.use('/api/user', userRoutes);
-
 
 // Start server
 const PORT = process.env.PORT || 5001;

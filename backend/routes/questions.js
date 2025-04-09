@@ -1,6 +1,5 @@
-import express from 'express';
-import Question from '../models/Question.js';
-
+const express = require('express');
+const Question = require('../models/Question');
 const router = express.Router();
 
 // Add question
@@ -25,4 +24,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
