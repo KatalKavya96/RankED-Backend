@@ -66,3 +66,37 @@ exports.updateUser = async (req, res) => {
     res.status(500).send("Update failed");
   }
 };
+
+exports.followUser = async (req, res) => {
+  const { followerUsername } = req.body;
+  const targetUsername = req.params.username;
+
+  if (followerUsername === targetUsername) {
+    return res.status(400).json({ message: "You cannot follow yourself" });
+  }
+
+  try {
+    const targetUser = await User.findOne({ username: targetUsername });
+    const followerUser = await User.findOne({ username: followerUsername });
+
+    if (!targetUser || !followerUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Avoid duplicates
+    if (!targetUser.followers.includes(followerUsername)) {
+      targetUser.followers.push(followerUsername);
+    }
+    if (!followerUser.following.includes(targetUsername)) {
+      followerUser.following.push(targetUsername);
+    }
+
+    await targetUser.save();
+    await followerUser.save();
+
+    res.json({ message: `@${followerUsername} now follows @${targetUsername}` });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+

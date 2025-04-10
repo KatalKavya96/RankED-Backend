@@ -11,7 +11,10 @@ const userProgressSchema = new mongoose.Schema({
   solvedQuestions: [String],
   bookmarkedQuestions: [String],
   submissionLog: Object,
-  correctSubmissions: Number
+  correctSubmissions: Number,
+
+  followers: [String],
+  following: [String],
 });
 
 module.exports = mongoose.model('UserProgress', userProgressSchema);
