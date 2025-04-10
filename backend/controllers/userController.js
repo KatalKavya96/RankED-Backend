@@ -1,6 +1,6 @@
 const User = require('../models/UserProgress');
 
-// GET user progress
+// GET user by UID
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findOne({ uid: req.params.uid });
@@ -11,7 +11,25 @@ exports.getUser = async (req, res) => {
   }
 };
 
-// POST: Create new user progress
+// GET user by username (for public profiles)
+exports.getUserByUsername = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({
+      username: user.username,
+      email: user.email,
+      college: user.college,
+      location: user.location,
+      linkedin: user.linkedin
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+// POST new user
 exports.createUser = async (req, res) => {
   const { uid, email } = req.body;
   try {
@@ -33,7 +51,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// PATCH: Update user progress
+// PATCH update user
 exports.updateUser = async (req, res) => {
   const { uid } = req.params;
   try {
