@@ -14,13 +14,47 @@ exports.getUser = async (req, res) => {
 // GET user by username (for public profiles)
 exports.getUserByUsername = async (req, res) => {
   try {
-    const user = await UserProgress.findOne({ username: req.params.username });
+    const user = await User.findOne({
+      username: new RegExp(`^${req.params.username}$`, 'i') // case-insensitive match
+    });
+
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const { uid, email, username, college, location, linkedin, photoURL, displayName, solvedQuestions, submissionLog, correctSubmissions, allQuestions, followers, following } = user;
+    const {
+      uid,
+      email,
+      username,
+      college,
+      location,
+      linkedin,
+      photoURL,
+      displayName,
+      solvedQuestions,
+      submissionLog,
+      correctSubmissions,
+      allQuestions,
+      followers,
+      following
+    } = user;
 
-    res.json({ uid, email, username, college, location, linkedin, photoURL, displayName, solvedQuestions, submissionLog, correctSubmissions, allQuestions, followers, following });
+    res.json({
+      uid,
+      email,
+      username,
+      college,
+      location,
+      linkedin,
+      photoURL,
+      displayName,
+      solvedQuestions,
+      submissionLog,
+      correctSubmissions,
+      allQuestions,
+      followers,
+      following
+    });
   } catch (err) {
+    console.error('❌ Error in getUserByUsername:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
