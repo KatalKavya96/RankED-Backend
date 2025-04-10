@@ -14,20 +14,17 @@ exports.getUser = async (req, res) => {
 // GET user by username (for public profiles)
 exports.getUserByUsername = async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.params.username });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await UserProgress.findOne({ username: req.params.username });
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    res.json({
-      username: user.username,
-      email: user.email,
-      college: user.college,
-      location: user.location,
-      linkedin: user.linkedin
-    });
+    const { uid, email, username, college, location, linkedin, photoURL, displayName, solvedQuestions, submissionLog, correctSubmissions, allQuestions, followers, following } = user;
+
+    res.json({ uid, email, username, college, location, linkedin, photoURL, displayName, solvedQuestions, submissionLog, correctSubmissions, allQuestions, followers, following });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // POST new user
 exports.createUser = async (req, res) => {
